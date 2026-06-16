@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversor de Temperatura</title>
+    <link rel="stylesheet" href="conversão_de_temperatura.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1>Conversor de Temperatura</h1>
+        <p>Digite o valor em graus Celsius (°C) para converter em Fahrenheit (°F).</p>
+        
+        <div class="formulario">
+            <input type="number" id="celsiusInput" placeholder="Ex: 25" step="any">
+            <button id="btnConverter">Converter</button>
+        </div>
+
+        <div id="resultado" class="resultado-container">
+            <p class="placeholder-texto">Nenhuma temperatura convertida ainda.</p>
+        </div>
+    </div>
+
+    <script src="conversão_de_temperatura.js"></script>
+</body>
+</html>
