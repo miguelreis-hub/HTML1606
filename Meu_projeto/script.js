@@ -1,67 +1,112 @@
-// 1. Selecionando os elementos do HTML
-const visor = document.getElementById('visor');
-const botoesNumeros = document.querySelectorAll('.numero');
-const botoesOperadores = document.querySelectorAll('.operador');
-const botaoIgual = document.getElementById('igual');
-const botaoLimpar = document.getElementById('limpar');
-const botaoApagar = document.getElementById('apagar');
+/**
+ * Calculadora Modular - Lógica de Interação
+ * Escrito com foco em manutenibilidade e prevenção de erros.
+ */
 
-// 2. Função para adicionar números e pontos ao visor
-botoesNumeros.forEach(botao => {
-    botao.addEventListener('click', () => {
-        // Evita colocar mais de um ponto no visor se já houver um no último número
-        if (botao.innerText === '.' && visor.value.includes('.')) {
-            // Uma verificação simples: se o visor já tem ponto e o último caractere não é um operador, ignoramos.
-            // (Para uma calculadora perfeita, a lógica do ponto é mais complexa, mas essa serve para começar!)
-        }
-        visor.value += botao.innerText;
-    });
-});
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Seleção de elementos usando IDs e classes BEM
+    const visor = document.getElementById('visor');
+    const botoesNum = document.querySelectorAll('.btn--num');
+    const botoesOp = document.querySelectorAll('.btn--operator');
+    const btnLimpar = document.getElementById('limpar');
+    const btnApagar = document.getElementById('apagar');
+    const btnIgual = document.getElementById('igual');
 
-// 3. Função para adicionar operadores (+, -, *, /)
-botoesOperadores.forEach(botao => {
-    botao.addEventListener('click', () => {
-        if (visor.value === '') return; // Não adiciona operador se o visor estiver vazio
+    // Array de controle para os operadores permitidos
+    const operadoresPermitidos = ['+', '-', '*', '/'];
 
-        const ultimoCaractere = visor.value.slice(-1);
-        const operadores = ['+', '-', '*', '/'];
+    // Função auxiliar para verificar se o último caractere do visor é um operador
+    const isUltimoCaractereOperador = () => {
+        if (!visor.value) return false;
+        return operadoresPermitidos.includes(visor.value.slice(-1));
+    };
 
-        // Se o último caractere digitado já for um operador, nós o substituímos pelo novo
-        if (operadores.includes(ultimoCaractere)) {
-            visor.value = visor.value.slice(0, -1) + botao.innerText;
-        } else {
-            visor.value += botao.innerText;
-        }
-    });
-});
+    // 2. Lógica dos Números e Ponto Decimal
+    botoesNum.forEach(botao => {
+        botao.addEventListener('click', () => {
+            const valor = botao.innerText;
 
-// 4. Função para o botão "C" (Limpar tudo)
-botaoLimpar.addEventListener('click', () => {
-    visor.value = '';
-});
+            // Se o visor estiver mostrando erro, limpa antes de iniciar nova digitação
+            if (visor.value === 'Erro') visor.value = '';
 
-// 5. Função para o botão "DEL" (Apagar o último caractere)
-botaoApagar.addEventListener('click', () => {
-    visor.value = visor.value.slice(0, -1);
-});
-
-// 6. Função para o botão "=" (Calcular o resultado)
-botaoIgual.addEventListener('click', () => {
-    try {
-        if (visor.value !== '') {
-            // A função eval() executa a string como código matemático. 
-            // Exemplo: eval("2+2") retorna 4.
-            let resultado = eval(visor.value);
-            
-            // Verifica se o resultado é infinito (ex: divisão por zero) ou inválido
-            if (!isFinite(resultado) || isNaN(resultado)) {
-                visor.value = "Erro";
-            } else {
-                visor.value = resultado;
+            // Lógica avançada para o ponto decimal
+            if (valor === '.') {
+                // Divide a expressão atual pelos operadores para analisar apenas o número atual
+                const partes = visor.value.split(/[\+\-\*\/]/);
+                const ultimoNumero = partes[partes.length - 1];
+                
+                // Se o número atual já tem um ponto, ignora o clique
+                if (ultimoNumero.includes('.')) return; 
+                
+                // Se começar com ponto (ex: clicou em '.' no visor vazio ou após um '+')
+                if (visor.value === '' || isUltimoCaractereOperador()) {
+                    visor.value += '0.'; 
+                    return;
+                }
             }
+
+            visor.value += valor;
+        });
+    });
+
+    // 3. Lógica dos Operadores
+    botoesOp.forEach(botao => {
+        botao.addEventListener('click', () => {
+            // Pega o operador do atributo data-op (mais seguro que ler o texto do botão)
+            const operador = botao.getAttribute('data-op');
+
+            if (visor.value === '' || visor.value === 'Erro') return;
+
+            // Se o último caractere já for um operador, apenas substitui pelo novo
+            if (isUltimoCaractereOperador()) {
+                visor.value = visor.value.slice(0, -1) + operador;
+            } else {
+                visor.value += operador;
+            }
+        });
+    });
+
+    // 4. Lógica de Limpar tudo (C)
+    btnLimpar.addEventListener('click', () => {
+        visor.value = '';
+    });
+
+    // 5. Lógica de Apagar último caractere (DEL)
+    btnApagar.addEventListener('click', () => {
+        if (visor.value === 'Erro') {
+            visor.value = '';
+        } else {
+            visor.value = visor.value.slice(0, -1);
         }
-    } catch (erro) {
-        // Se houver algum erro na conta (ex: 5++5), mostra "Erro"
-        visor.value = "Erro";
-    }
+    });
+
+    // 6. Lógica de Calcular o Resultado (=)
+    btnIgual.addEventListener('click', () => {
+        try {
+            if (visor.value === '' || visor.value === 'Erro') return;
+            
+            // Se a conta terminar em um operador (ex: "5+"), remove o "+" antes de calcular
+            if (isUltimoCaractereOperador()) {
+                visor.value = visor.value.slice(0, -1);
+            }
+
+            // A função 'new Function' é uma alternativa mais limpa e isolada ao 'eval()'
+            // Ela cria uma função anônima que retorna o resultado da expressão matemática
+            const calculo = new Function('return ' + visor.value)();
+
+            // Tratamento: Divisão por zero no JS retorna Infinity
+            if (!isFinite(calculo) || Number.isNaN(calculo)) {
+                visor.value = 'Erro';
+                return;
+            }
+
+            // Formatação: parseFloat + toFixed(8) corrige as falhas de ponto flutuante do JS
+            // mantendo os números inteiros limpos e limitando casas decimais excessivas.
+            visor.value = parseFloat(calculo.toFixed(8));
+
+        } catch (erro) {
+            console.error('Erro na expressão matemática:', erro);
+            visor.value = 'Erro';
+        }
+    });
 });

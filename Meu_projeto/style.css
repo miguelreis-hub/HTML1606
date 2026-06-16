@@ -1,84 +1,184 @@
-/* 1. Reset básico para tirar margens padrão do navegador */
+/* =========================================
+   1. DESIGN TOKENS (Variáveis Globais)
+   ========================================= */
+:root {
+    /* Cores de Fundo e Texto */
+    --bg-page: #f4f7f6;
+    --bg-calc: #1e293b;
+    --bg-visor: #0f172a;
+    --text-visor: #10b981; /* Verde digital */
+    --text-main: #ffffff;
+
+    /* Cores dos Botões (BEM Modifiers) */
+    --btn-num-bg: #334155;
+    --btn-num-hover: #475569;
+    
+    --btn-operator-bg: #3b82f6; /* Azul */
+    --btn-operator-hover: #2563eb;
+    
+    --btn-action-bg: #ef4444; /* Vermelho para C e DEL */
+    --btn-action-hover: #dc2626;
+    
+    --btn-equal-bg: #10b981; /* Verde para o = */
+    --btn-equal-hover: #059669;
+
+    /* Espaçamentos e Bordas */
+    --spacing-sm: 10px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --radius-calc: 20px;
+    --radius-btn: 12px;
+}
+
+/* =========================================
+   2. RESET E LAYOUT GERAL
+   ========================================= */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Arial', sans-serif;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
-/* 2. Centralizando a calculadora no meio da tela */
 body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: var(--bg-page);
+    color: var(--bg-calc);
+}
+
+/* =========================================
+   3. NAVEGAÇÃO (Header)
+   ========================================= */
+header {
+    width: 100%;
+    padding: var(--spacing-md) var(--spacing-lg);
+    background-color: #ffffff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.menu-navegacao {
+    display: flex;
+    justify-content: flex-end; /* Coloca o link à direita */
+}
+
+.btn-navegar {
+    text-decoration: none;
+    color: var(--btn-operator-bg);
+    font-weight: 600;
+    font-size: 1rem;
+    transition: color 0.2s ease;
+}
+
+.btn-navegar:hover {
+    color: var(--btn-operator-hover);
+    text-decoration: underline;
+}
+
+/* =========================================
+   4. CONTAINER PRINCIPAL (Centraliza a Calc)
+   ========================================= */
+.container {
+    flex-grow: 1; /* Ocupa todo o espaço restante abaixo do header */
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    background-color: #e0e5ec; /* Cor de fundo da página */
+    padding: var(--spacing-md);
 }
 
-/* 3. O "corpo" da calculadora */
+/* =========================================
+   5. BLOCO: CALCULADORA
+   ========================================= */
 .calculadora {
-    background-color: #2c3e50; /* Fundo escuro */
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0px 15px 25px rgba(0, 0, 0, 0.4);
-    width: 320px;
-}
-
-/* 4. Estilo do visor */
-#visor {
+    background-color: var(--bg-calc);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-calc);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
     width: 100%;
-    height: 70px;
-    background-color: #ecf0f1;
-    border: none;
-    border-radius: 8px;
-    font-size: 2.5rem;
-    text-align: right; /* O texto começa da direita para a esquerda */
-    padding: 10px;
-    margin-bottom: 20px;
-    color: #2c3e50;
+    max-width: 340px;
 }
 
-/* 5. Organizando os botões em uma grade (Grid) de 4 colunas */
+/* Visor */
+.visor {
+    width: 100%;
+    height: 80px;
+    background-color: var(--bg-visor);
+    border: none;
+    border-radius: var(--radius-btn);
+    font-size: 2.5rem;
+    text-align: right;
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    color: var(--text-visor);
+    font-family: 'Courier New', Courier, monospace; /* Fonte com estilo de calculadora */
+    box-shadow: inset 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.visor::placeholder {
+    color: rgba(16, 185, 129, 0.5); /* Verde mais opaco para o zero inicial */
+}
+
+/* Grid de Botões */
 .botoes {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 12px; /* Espaço entre os botões */
+    gap: var(--spacing-sm);
 }
 
-/* 6. Estilo padrão para todos os botões */
+/* =========================================
+   6. BOTÕES E MODIFICADORES (BEM)
+   ========================================= */
 .btn {
-    padding: 20px 15px;
-    font-size: 1.5rem;
-    font-weight: bold;
+    padding: 20px 0;
+    font-size: 1.4rem;
+    font-weight: 600;
     border: none;
-    border-radius: 8px;
+    border-radius: var(--radius-btn);
     cursor: pointer;
-    background-color: #34495e;
-    color: white;
-    transition: 0.2s; /* Deixa a animação de passar o mouse mais suave */
+    color: var(--text-main);
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    user-select: none; /* Impede que o texto do botão seja selecionado ao clicar rápido */
 }
 
-/* Efeito ao passar o mouse por cima do botão */
-.btn:hover {
-    background-color: #415b76;
-}
-
-/* Efeito de "apertar" o botão ao clicar */
+/* Efeito de clique em qualquer botão */
 .btn:active {
-    transform: scale(0.95);
+    transform: scale(0.92);
 }
 
-/* 7. Estilos específicos por tipo de botão */
-.operador {
-    background-color: #f39c12; /* Laranja */
+/* Modificador: Números */
+.btn--num {
+    background-color: var(--btn-num-bg);
+}
+.btn--num:hover {
+    background-color: var(--btn-num-hover);
 }
 
-.operador:hover {
-    background-color: #e67e22;
+/* O botão Zero ocupa 2 colunas */
+.zero {
+    grid-column: span 2;
 }
 
-.limpar {
-    background-color: #e74c3c; /* Vermelho */
+/* Modificador: Operadores (/, *, -, +) */
+.btn--operator {
+    background-color: var(--btn-operator-bg);
+}
+.btn--operator:hover {
+    background-color: var(--btn-operator-hover);
 }
 
-.limpar
+/* Modificador: Ações (C, DEL) */
+.btn--action {
+    background-color: var(--btn-action-bg);
+}
+.btn--action:hover {
+    background-color: var(--btn-action-hover);
+}
+
+/* Modificador: Igual (=) */
+.btn--equal {
+    background-color: var(--btn-equal-bg);
+}
+.btn--equal:hover {
+    background-color: var(--btn-equal-hover);
+}

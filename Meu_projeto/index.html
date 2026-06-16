@@ -3,48 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Calculadora web funcional desenvolvida com foco em modularidade.">
     <link rel="stylesheet" href="style.css">
-    <title>Calculadora</title>
+    <title>Calculadora | App Suite</title>
 </head>
 <body>
 
-    <nav class="menu-navegacao">
-        <a href="tabuada.html" class="btn-navegar">Ir para a Tabuada →</a>
-    </nav>
+    <header>
+        <nav class="menu-navegacao" aria-label="Navegação do sistema">
+            <a href="tabuada.html" class="btn-navegar">Ir para a Tabuada →</a>
+        </nav>
+    </header>
 
+    <main class="container">
+        <section class="calculadora" aria-label="Interface da Calculadora">
+            
+            <input type="text" id="visor" class="visor" disabled aria-label="Visor da calculadora" placeholder="0">
 
-    <div class="calculadora">
-        
-        <input type="text" id="visor" disabled>
+            <div class="botoes" role="grid">
+                <button class="btn btn--action" id="limpar" aria-label="Limpar tudo">C</button>
+                <button class="btn btn--operator" data-op="/">/</button>
+                <button class="btn btn--operator" data-op="*">×</button>
+                <button class="btn btn--action" id="apagar" aria-label="Apagar último caractere">DEL</button>
 
-        <div class="botoes">
-            <button class="btn limpar" id="limpar">C</button>
-            <button class="btn operador" id="dividir">/</button>
-            <button class="btn operador" id="multiplicar">*</button>
-            <button class="btn apagar" id="apagar">DEL</button>
+                <button class="btn btn--num">7</button>
+                <button class="btn btn--num">8</button>
+                <button class="btn btn--num">9</button>
+                <button class="btn btn--operator" data-op="-">-</button>
 
-            <button class="btn numero">7</button>
-            <button class="btn numero">8</button>
-            <button class="btn numero">9</button>
-            <button class="btn operador" id="subtrair">-</button>
+                <button class="btn btn--num">4</button>
+                <button class="btn btn--num">5</button>
+                <button class="btn btn--num">6</button>
+                <button class="btn btn--operator" data-op="+">+</button>
 
-            <button class="btn numero">4</button>
-            <button class="btn numero">5</button>
-            <button class="btn numero">6</button>
-            <button class="btn operador" id="somar">+</button>
+                <button class="btn btn--num">1</button>
+                <button class="btn btn--num">2</button>
+                <button class="btn btn--num">3</button>
+                <button class="btn btn--equal" id="igual" aria-label="Calcular">=</button>
 
-            <button class="btn numero">1</button>
-            <button class="btn numero">2</button>
-            <button class="btn numero">3</button>
-            <button class="btn igual" id="igual">=</button>
+                <button class="btn btn--num zero">0</button>
+                <button class="btn btn--num">.</button>
+            </div>
+        </section>
+    </main>
 
-            <button class="btn numero zero">0</button>
-            <button class="btn numero ponto">.</button>
-        </div>
-
-    </div>
-
-    <script src="script.js"></script>
-
+    <script src="script.js" defer></script>
 </body>
 </html>
