@@ -1,0 +1,205 @@
+/* ==========================================================================
+   1. CONFIGURAÇÕES GERAIS E VARIÁVEIS (DESIGN SYSTEM)
+   ========================================================================== */
+:root {
+    /* Paleta de Cores (Modern Tech/Minimal) */
+    --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    --card-bg: rgba(30, 41, 59, 0.7);
+    --card-border: rgba(255, 255, 255, 0.08);
+    
+    --primary: #6366f1;
+    --primary-hover: #4f46e5;
+    --primary-light: rgba(99, 102, 241, 0.15);
+    
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --text-accent: #38bdf8;
+    
+    --input-bg: #0f172a;
+    --input-border: #334155;
+
+    /* Tipografia e Efeitos */
+    --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+    --radius-lg: 16px;
+    --radius-md: 12px;
+    --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    --shadow-elegant: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+}
+
+/* Reset Profissional */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    background: var(--bg-gradient);
+    color: var(--text-main);
+    font-family: var(--font-sans);
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 20px;
+}
+
+/* ==========================================================================
+   2. CONTAINER PRINCIPAL (GLASSMORPHISM)
+   ========================================================================== */
+.container {
+    background: var(--card-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--card-border);
+    padding: 40px 30px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-elegant);
+    width: 100%;
+    max-width: 440px;
+    animation: cardEntrance 0.6s ease-out;
+}
+
+h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    margin-bottom: 8px;
+    background: linear-gradient(to right, #fff, var(--text-muted));
+    -webkit-text-fill-color: transparent;
+}
+
+p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin-bottom: 30px;
+    line-height: 1.5;
+}
+
+/* ==========================================================================
+   3. FORMULÁRIO E INPUTS DE ALTA PERFORMANCE
+   ========================================================================== */
+.formulario {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+input[type="number"] {
+    flex: 1;
+    background-color: var(--input-bg);
+    border: 2px solid var(--input-border);
+    color: var(--text-main);
+    padding: 14px;
+    border-radius: var(--radius-md);
+    font-size: 1.1rem;
+    font-weight: 600;
+    outline: none;
+    text-align: center;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+/* Estado de Foco Acessível */
+input[type="number"]:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px var(--primary-light);
+}
+
+/* Remove as setas nativas feias do input type="number" */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+button {
+    background-color: var(--primary);
+    color: #ffffff;
+    border: none;
+    padding: 14px 24px;
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color var(--transition-fast), transform var(--transition-fast);
+}
+
+button:hover {
+    background-color: var(--primary-hover);
+}
+
+button:active {
+    transform: scale(0.97); /* Efeito de clique físico */
+}
+
+/* ==========================================================================
+   4. ÁREA DE RESULTADOS E ANIMAÇÕES
+   ========================================================================== */
+.resultado-container {
+    background-color: rgba(15, 23, 42, 0.4);
+    border: 1px solid var(--input-border);
+    border-radius: var(--radius-md);
+    padding: 10px 20px;
+    max-height: 380px;
+    overflow-y: auto;
+}
+
+/* Customização da barra de rolagem (Scrollbar elegante) */
+.resultado-container::-webkit-scrollbar {
+    width: 6px;
+}
+.resultado-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+.resultado-container::-webkit-scrollbar-thumb {
+    background: var(--input-border);
+    border-radius: 3px;
+}
+
+.placeholder-texto {
+    color: var(--text-muted);
+    font-style: italic;
+    padding: 20px 0;
+}
+
+/* Linhas da tabuada renderizadas dinamicamente */
+.linha-tabuada {
+    font-size: 1.1rem;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    opacity: 0;
+    animation: rowFadeIn 0.4s ease forwards;
+}
+
+.linha-tabuada:last-child {
+    border-bottom: none;
+}
+
+.linha-tabuada strong {
+    color: var(--text-accent);
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   5. KEYFRAMES (ANIMAÇÕES)
+   ========================================================================== */
+@keyframes cardEntrance {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes rowFadeIn {
+    to {
+        opacity: 1;
+    }
+}
